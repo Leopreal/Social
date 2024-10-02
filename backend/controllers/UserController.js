@@ -76,7 +76,60 @@ const login = async (req, res) => {
   });
 };
 
+// get usuario atual logado
+const getCurrentUser = async (req, res) => {
+  const user = req.user;
+
+  res.status(200).json(user);
+};
+
+// update an user
+
+const update = async (req, res) => {
+  // res.send("update");
+  const { name, password, bio } = req.body;
+  const reqUser = req.user;
+  const user = await User.findById(reqUser._id).select("-password");
+  if (name) {
+    user.name = name;
+  }
+  if (password) {
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+    user.password = passwordHash;
+  }
+  if (bio) {
+    user.bio = bio;
+  }
+  await user.save();
+  res.status(200).json(user);
+};
+
+// get user by id
+
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id).select("-password");
+
+    //checkando se o user existe
+    if (!user) {
+      res.status(404).json({ errors: "usuario nao encontrado" });
+      return;
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ errors: "usuario nao encontrado" });
+    return;
+  }
+};
+
 module.exports = {
   register,
   login,
+  getCurrentUser,
+  update,
+  getUserById,
 };
