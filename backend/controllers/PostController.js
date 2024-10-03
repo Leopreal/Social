@@ -42,7 +42,7 @@ const deletePosts = async (req, res) => {
 
     if (!post) {
       res.status(404).json({
-        errors: ["foto nao encontrada"],
+        errors: ["post nao encontrado"],
       });
       return;
     }
@@ -96,7 +96,7 @@ const getPostById = async (req, res) => {
 
   const post = await Post.findById(id);
 
-  // checando se a foto n existir
+  // checando se o post n existir
 
   if (!post) {
     res.status(200).json({ errors: ["post nao encontrado"] });
@@ -119,7 +119,7 @@ const updatePost = async (req, res) => {
   // checando se o post existe
 
   if (!opost) {
-    res.status(404).json({ errors: ["foto nao encontrada"] });
+    res.status(404).json({ errors: ["post nao encontrada"] });
     return;
   }
 
