@@ -90,9 +90,143 @@ const getUsersPost = async (req, res) => {
   return res.status(200).json(posts);
 };
 
+// pegando post pelo id
+const getPostById = async (req, res) => {
+  const { id } = req.params;
+
+  const post = await Post.findById(id);
+
+  // checando se a foto n existir
+
+  if (!post) {
+    res.status(200).json({ errors: ["post nao encontrado"] });
+    return;
+  }
+
+  res.status(200).json(post);
+};
+
+// atualizar o post
+
+const updatePost = async (req, res) => {
+  const { id } = req.params;
+  const { title, post } = req.body;
+
+  const reqUser = req.user;
+
+  const opost = await Post.findById(id);
+
+  // checando se o post existe
+
+  if (!opost) {
+    res.status(404).json({ errors: ["foto nao encontrada"] });
+    return;
+  }
+
+  if (!opost.userId.equals(reqUser._id)) {
+    res.status(422).json({ errors: ["ocorreu um erro"] });
+    return;
+  }
+
+  if (title) {
+    opost.title = title;
+  }
+
+  if (post) {
+    opost.post = post;
+  }
+
+  await opost.save();
+
+  res.status(200).json({ opost, message: "post atualizado" });
+};
+
+// funcionalidade like
+
+const likePost = async (req, res) => {
+  const { id } = req.params;
+
+  const reqUser = req.user;
+
+  const post = await Post.findById(id);
+
+  // checando se o post existe
+
+  if (!post) {
+    res.status(404).json({ errors: ["post nao encontrado"] });
+    return;
+  }
+
+  // checando se o post ja foi curtido
+
+  if (post.likes.includes(reqUser._id)) {
+    res.status(422).json({ errors: ["voce ja curtiu o post"] });
+    return;
+  }
+
+  // colocar o id do usuario no array de likes
+
+  post.likes.push(reqUser._id);
+
+  post.save();
+
+  res
+    .status(200)
+    .json({ postId: id, userId: reqUser._id, message: "post curtido" });
+};
+
+// funcionalidade de comentarios
+
+const commentPost = async (req, res) => {
+  const { id } = req.params;
+  const { comment } = req.body;
+
+  const reqUser = req.user;
+
+  const user = await User.findById(reqUser._id);
+
+  const post = await Post.findById(id);
+
+  if (!post) {
+    res.status(404).json({ errors: ["post nao encontrado"] });
+    return;
+  }
+
+  // colocando comentario
+
+  const userComment = {
+    comment,
+    userName: user.name,
+    userId: user._id,
+  };
+
+  post.comments.push(userComment);
+
+  await post.save();
+
+  res.status(200).json({
+    comment: userComment,
+    message: "comentario adicionado",
+  });
+};
+
+// buscando post pelo titulo
+const searchPosts = async (req, res) => {
+  const { q } = req.query;
+
+  const posts = await Post.find({ title: new RegExp(q, "i") }).exec();
+
+  res.status(200).json(posts);
+};
+
 module.exports = {
   InsertPost,
   deletePosts,
   getAllPosts,
   getUsersPost,
+  getPostById,
+  updatePost,
+  likePost,
+  commentPost,
+  searchPosts,
 };
