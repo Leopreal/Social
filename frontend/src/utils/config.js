@@ -1,5 +1,4 @@
 export const api = "http://localhost:5000/api";
-export const upload = "http://localhost:5000/uploads";
 
 export const requestConfig = (method, data, token = null, post = null) => {
   let config;

@@ -18,9 +18,11 @@ const profile = async (data, token) => {
 
 // atualizar detalhes do usuario
 const updateProfile = async (data, token) => {
-  const config = requestConfig("PUT", data, token, true);
+  const config = requestConfig("PUT", data, token);
 
   try {
+    console.log("dados para o updateProfile: ", data);
+
     const res = await fetch(api + "/users/", config)
       .then((res) => res.json())
       .catch((err) => err);

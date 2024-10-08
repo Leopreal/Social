@@ -83,10 +83,9 @@ const getCurrentUser = async (req, res) => {
   res.status(200).json(user);
 };
 
-// update an user
+// update an user 
 
 const update = async (req, res) => {
-  // res.send("update");
   const { name, password, bio } = req.body;
   const reqUser = req.user;
   const user = await User.findById(reqUser._id).select("-password");

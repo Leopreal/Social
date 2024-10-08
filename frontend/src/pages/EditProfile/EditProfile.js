@@ -1,5 +1,4 @@
 import "./EditProfile.css";
-import { upload } from "../../utils/config";
 
 // hooks
 import { useState, useEffect } from "react";
@@ -53,28 +52,8 @@ const EditProfile = () => {
       userData.password = password;
     }
 
-    // const formData = new FormData();
 
-    // const userFormData = Object.keys(userData).forEach((key) =>
-    //   formData.append(key, userData[key])
-    // );
-
-    // formData.append("user", userFormData);
-
-    // await dispatch(updateProfile(userFormData));
-
-    // const formData = new FormData();
-    // Object.keys(userData).forEach((key) => formData.append(key, userData[key]));
-    // dispatch(updateProfile(formData));
-
-    // -------------------------ARRUMAR
-    const userFormData = Object.keys(userData).reduce((formData, key) => {
-      formData.append(key, userData[key]);
-      return formData;
-    }, new FormData());
-    await dispatch(updateProfile(userFormData));
-
-    console.log(userData);
+    await dispatch(updateProfile(userData));
 
     setTimeout(() => {
       dispatch(resetMessage());
@@ -114,7 +93,7 @@ const EditProfile = () => {
         {!loading && <input type="submit" value={"Atualizar"} />}
         {loading && <input type="submit" value={"Aguarde..."} disabled />}
         {error && <Message msg={error} type={"error"} />}
-        {message && <Message msg={message} type={"sucess"} />}
+        {message && <Message msg={message} type={"success"} />}
       </form>
     </div>
   );
