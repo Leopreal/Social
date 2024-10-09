@@ -35,7 +35,15 @@ export const updateProfile = createAsyncThunk(
       return thunkAPI.rejectWithValue(data.errors[0]);
     }
 
-    // console.log(data);
+    return data;
+  }
+);
+
+// pegar dados pelo id do usuario
+export const getUserDetails = createAsyncThunk(
+  "user/get",
+  async (id, thunkAPI) => {
+    const data = await userService.getUserDetails(id);
 
     return data;
   }
@@ -77,6 +85,16 @@ export const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.user = {};
+      })
+      .addCase(getUserDetails.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getUserDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sucess = true;
+        state.error = null;
+        state.user = action.payload;
       });
   },
 });
