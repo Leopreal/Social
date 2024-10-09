@@ -11,7 +11,11 @@ import { useParams } from "react-router-dom";
 
 // redux
 import { getUserDetails } from "../../slices/userSlice";
-import { publishPost, resetMessage } from "../../slices/PostSlice";
+import {
+  publishPost,
+  resetMessage,
+  getUserPosts,
+} from "../../slices/PostSlice";
 
 const Profile = () => {
   const { id } = useParams();
@@ -39,6 +43,7 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(getUserDetails(id));
+    dispatch(getUserPosts(id));
   }, [dispatch, id]);
 
   const handleSubmit = (e) => {
@@ -108,6 +113,21 @@ const Profile = () => {
           {messagePost && <Message msg={messagePost} type="success" />}
         </>
       )}
+      <div className="user-posts">
+        <h2>Posts Publicados</h2>
+        <div className="posts-container">
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <div key={post._id} className="post">
+                <h3>{post.title}</h3>
+                <p>{post.post}</p>
+              </div>
+            ))
+          ) : (
+            <p>Este usuário ainda não publicou nenhum post.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
