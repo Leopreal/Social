@@ -67,9 +67,7 @@ const Profile = () => {
 
     console.log(postData);
 
-    dispatch(publishPost(postData)).then((response) => {
-      console.log(response); // Verifique se está retornando o que espera
-    });
+    dispatch(publishPost(postData));
 
     setTitle("");
     setPost("");
@@ -99,10 +97,12 @@ const Profile = () => {
     e.preventDefault();
 
     const postData = {
+      id: editId,
       title: editTitle,
       post: editPost,
-      id: editId,
     };
+
+    console.log(postData);
 
     dispatch(updatePost(postData));
 
@@ -115,7 +115,7 @@ const Profile = () => {
       hideOrShowForms();
     }
 
-    setEditId(post.id);
+    setEditId(post._id);
     setEditTitle(post.title);
     setEditPost(post.post);
   };

@@ -66,6 +66,10 @@ export const updatePost = createAsyncThunk(
   async (postData, thunkAPI) => {
     const token = thunkAPI.getState().auth.user.token;
 
+    if (!postData.id) {
+      return thunkAPI.rejectWithValue("ID do post é indefinido.");
+    }
+
     const data = await PostService.updatePost(
       { title: postData.title, post: postData.post },
       postData.id,
@@ -171,6 +175,16 @@ export const postSlice = createSlice({
 
         // state.posts = updatedPosts;
         // state.message = action.payload.message;
+
+        const updatedPost = state.posts.find(
+          (post) => post._id === action.payload._id
+        );
+        if (updatedPost) {
+          updatedPost.title = action.payload.title;
+          updatedPost.post = action.payload.post;
+        }
+
+        state.message = "Post atualizado com sucesso!";
       })
       .addCase(updatePost.rejected, (state, action) => {
         state.loading = false;

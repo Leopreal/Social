@@ -51,7 +51,7 @@ const updatePost = async (data, id, token) => {
   const config = requestConfig("PUT", data, token);
 
   try {
-    const res = fetch(api + "/posts/" + id, config)
+    const res = await fetch(api + "/posts/" + id, config)
       .then((res) => res.json())
       .catch((err) => err);
 
