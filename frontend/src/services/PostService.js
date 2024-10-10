@@ -29,9 +29,43 @@ const getUserPost = async (id, token) => {
   }
 };
 
+//  deletar post
+
+const deletePost = async (id, token) => {
+  const config = requestConfig("DELETE", null, token);
+
+  try {
+    const res = await fetch(api + "/posts/" + id, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// editar post
+
+const updatePost = async (data, id, token) => {
+  const config = requestConfig("PUT", data, token);
+
+  try {
+    const res = fetch(api + "/posts/" + id, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const PostService = {
   publishPost,
   getUserPost,
+  deletePost,
+  updatePost,
 };
 
 export default PostService;

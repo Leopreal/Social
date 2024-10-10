@@ -11,14 +11,91 @@
   border-bottom: 1px solid #363636;
 }
 
+
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em; 
+}
+
+.post {
+  width: 100%; 
+  padding: 1em;
+  border: 1px solid #e1e8ed;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.post h3 {
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+}
+
+.post p {
+  font-size: 1em;
+  color: #555;
+}
+
+
 .actions {
   display: flex;
-  justify-content: space-around;
-  padding: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px; 
+  padding: 10px 0;
 }
 
 .actions svg {
   cursor: pointer;
+}
+
+.view-post {
+  display: flex;
+  align-items: center;
+  font-size: 1em;
+  color: #1da1f2; 
+  text-decoration: none;
+}
+
+.view-post svg {
+  margin-left: 5px; 
+  font-size: 1.2em;
+  color: #1da1f2;
+}
+
+.view-post:hover {
+  color: #0d8bce; 
+}
+
+.view-post:hover svg {
+  color: #0d8bce; 
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 1.3em; 
+  color: #555; 
+  transition: color 0.2s ease; 
+}
+
+.icon:hover {
+  color: #333; 
+}
+
+.edit-icon {
+  color: #ffca28; 
+}
+
+.edit-icon:hover {
+  color: #e6b800;
+}
+
+.delete-icon {
+  color: #e53935;
+}
+
+.delete-icon:hover {
+  color: #d32f2f; 
 }
 
 

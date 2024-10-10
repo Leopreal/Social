@@ -15,6 +15,8 @@ import {
   publishPost,
   resetMessage,
   getUserPosts,
+  deletePost,
+  updatePost,
 } from "../../slices/PostSlice";
 
 const Profile = () => {
@@ -33,6 +35,9 @@ const Profile = () => {
 
   const [title, setTitle] = useState("");
   const [post, setPost] = useState("");
+  const [editId, setEditId] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [editPost, setEditPost] = useState("");
 
   // novo form e edicao form refs
 
@@ -45,6 +50,12 @@ const Profile = () => {
     dispatch(getUserDetails(id));
     dispatch(getUserPosts(id));
   }, [dispatch, id]);
+
+  const resetComponentMessage = () => {
+    setTimeout(() => {
+      dispatch(resetMessage());
+    }, 2000);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -63,14 +74,55 @@ const Profile = () => {
     setTitle("");
     setPost("");
 
-    setTimeout(() => {
-      dispatch(resetMessage());
-    }, 2000);
+    resetComponentMessage();
+  };
+
+  // funcao deletar post
+  const handleDelete = (id) => {
+    dispatch(deletePost(id));
+
+    resetComponentMessage();
   };
 
   if (loading) {
     <p>Carregando...</p>;
   }
+
+  // mostrar ou esconder form
+  const hideOrShowForms = () => {
+    newPostForm.current.classList.toggle("hide");
+    editPostForm.current.classList.toggle("hide");
+  };
+
+  // update post
+  const handleUpdate = (e) => {
+    e.preventDefault();
+
+    const postData = {
+      title: editTitle,
+      post: editPost,
+      id: editId,
+    };
+
+    dispatch(updatePost(postData));
+
+    resetComponentMessage();
+  };
+
+  // abrindo form de edicao
+  const handleEdit = (post) => {
+    if (editPostForm.current.classList.contains("hide")) {
+      hideOrShowForms();
+    }
+
+    setEditId(post.id);
+    setEditTitle(post.title);
+    setEditPost(post.post);
+  };
+
+  const handleCancelEdit = () => {
+    hideOrShowForms();
+  };
 
   return (
     <div id="profile">
@@ -109,6 +161,27 @@ const Profile = () => {
               )}
             </form>
           </div>
+          <div className="edit-post hide" ref={editPostForm}>
+            <p>Editando</p>
+            <form onSubmit={handleUpdate}>
+              <span>Título para o Post</span>
+              <input
+                type="text"
+                onChange={(e) => setEditTitle(e.target.value)}
+                value={editTitle || ""}
+              />
+              <span>Insira o Conteúdo do Post</span>
+              <input
+                type="text"
+                onChange={(e) => setEditPost(e.target.value)}
+                value={editPost || ""}
+              />
+              <input type="submit" value="Atualizar" />
+              <button className="cancel-btn" onClick={handleCancelEdit}>
+                Cancelar Edição
+              </button>
+            </form>
+          </div>
           {errorPost && <Message msg={errorPost} type="error" />}
           {messagePost && <Message msg={messagePost} type="success" />}
         </>
@@ -121,6 +194,26 @@ const Profile = () => {
               <div key={post._id} className="post">
                 <h3>{post.title}</h3>
                 <p>{post.post}</p>
+                {id === userAuth._id ? (
+                  <div className="actions">
+                    <Link to={`/posts/${post._id}`} className="view-post">
+                      Ver Mais
+                      <BsFillEyeFill />
+                    </Link>
+                    <BsPencilFill
+                      className="icon edit-icon"
+                      onClick={() => handleEdit(post)}
+                    />
+                    <BsXLg
+                      className="icon delete-icon"
+                      onClick={() => handleDelete(post._id)}
+                    />
+                  </div>
+                ) : (
+                  <Link className="btn" to={`/posts/${post._id}`}>
+                    Ver
+                  </Link>
+                )}
               </div>
             ))
           ) : (
