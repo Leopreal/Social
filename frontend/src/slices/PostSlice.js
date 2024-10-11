@@ -84,6 +84,16 @@ export const updatePost = createAsyncThunk(
   }
 );
 
+export const getPost = createAsyncThunk(
+  "post/getpost",
+  async (id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await PostService.getPost(id, token);
+
+    return data;
+  }
+);
+
 export const postSlice = createSlice({
   name: "post",
   initialState,
@@ -148,34 +158,6 @@ export const postSlice = createSlice({
         state.loading = false;
         state.sucess = true;
         state.error = null;
-        // ---------------------------ARRUMAR-----------------------------
-        // state.posts.map((post) => {
-        //   if (post._id === action.payload.post._id) {
-        //     return (post.title = action.payload.post.title);
-        //   }
-        //   if (post._id === action.payload.post._id) {
-        //     return (post.post = action.payload.post.post);
-        //   }
-
-        //   return post;
-        // });
-
-        // state.message = action.payload.message;
-
-        // const updatedPosts = state.posts.map((post) => {
-        //   if (post._id === action.payload.post._id) {
-        //     return {
-        //       ...post,
-        //       title: action.payload.post.title,
-        //       post: action.payload.post.post,
-        //     };
-        //   }
-        //   return post;
-        // });
-
-        // state.posts = updatedPosts;
-        // state.message = action.payload.message;
-
         const updatedPost = state.posts.find(
           (post) => post._id === action.payload._id
         );
@@ -190,6 +172,16 @@ export const postSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.post = {};
+      })
+      .addCase(getPost.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sucess = true;
+        state.error = null;
+        state.post = action.payload;
       });
   },
 });
