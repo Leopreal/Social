@@ -11,7 +11,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // redux
-import { getPost } from "../../slices/PostSlice";
+import { getPost, like } from "../../slices/PostSlice";
+import LikeContainer from "../../components/LikeContainer";
 
 const Post = () => {
   const { id } = useParams();
@@ -30,6 +31,9 @@ const Post = () => {
   }, [dispatch, id]);
 
   // like e comentario
+  const handleLike = () => {
+    dispatch(like(post._id));
+  };
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -38,6 +42,7 @@ const Post = () => {
   return (
     <div id="post">
       <PostItem post={post} />
+      <LikeContainer post={post} user={user} handleLike={handleLike} />
     </div>
   );
 };

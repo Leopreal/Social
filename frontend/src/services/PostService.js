@@ -76,12 +76,29 @@ const getPost = async (id, token) => {
   }
 };
 
+// like
+
+const like = async (id, token) => {
+  const config = requestConfig("PUT", null, token);
+
+  try {
+    const res = await fetch(api + "/posts/like/" + id, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const PostService = {
   publishPost,
   getUserPost,
   deletePost,
   updatePost,
   getPost,
+  like,
 };
 
 export default PostService;

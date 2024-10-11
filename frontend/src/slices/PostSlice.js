@@ -84,6 +84,7 @@ export const updatePost = createAsyncThunk(
   }
 );
 
+// pegando post pelo id
 export const getPost = createAsyncThunk(
   "post/getpost",
   async (id, thunkAPI) => {
@@ -93,6 +94,18 @@ export const getPost = createAsyncThunk(
     return data;
   }
 );
+
+// like
+export const like = createAsyncThunk("post/like", async (id, thunkAPI) => {
+  const token = thunkAPI.getState().auth.user.token;
+  const data = await PostService.like(id, token);
+
+  if (data.errors) {
+    return thunkAPI.rejectWithValue(data.errors[0]);
+  }
+
+  return data;
+});
 
 export const postSlice = createSlice({
   name: "post",
@@ -182,6 +195,38 @@ export const postSlice = createSlice({
         state.sucess = true;
         state.error = null;
         state.post = action.payload;
+      })
+      .addCase(like.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sucess = true;
+        state.error = null;
+        const { postId, userId } = action.payload;
+
+
+        if (state.post._id === postId) {
+          if (!state.post.likes.includes(userId)) {
+            state.post.likes.push(userId); 
+          } else {
+            state.post.likes = state.post.likes.filter((id) => id !== userId); 
+          }
+        }
+        const postIndex = state.posts.findIndex((post) => post._id === postId);
+
+        if (postIndex !== -1) {
+        
+          if (!state.posts[postIndex].likes.includes(userId)) {
+            state.posts[postIndex].likes.push(userId); 
+          } else {
+            state.posts[postIndex].likes = state.posts[postIndex].likes.filter(
+              (id) => id !== userId
+            ); 
+          }
+        }
+        state.message = action.payload.message;
+      })
+      .addCase(like.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
