@@ -47,15 +47,25 @@ npm start
 
 📝 Usando a Aplicação
 Registrar-se: Vá para a página de registro e crie sua conta! 📝
+
 Login: Faça login com suas credenciais. 🔑
+
 Publicar Posts: Compartilhe suas ideias e interaja com os posts de outros usuários! 🖊️
+
 Curtir e Comentar: Mostre amor pelos posts e deixe seus comentários! ❤️💬
+
 🛠️ Testando a API com o Postman
+
 Registro: POST /api/users/register
+
 Login: POST /api/users/login
+
 Criar Post: POST /api/posts
+
 Curtir Post: PUT /api/posts/:id/like
+
 Comentar Post: POST /api/posts/:id/comment
+
 👉 Não esqueça de adicionar o token JWT no cabeçalho das requisições que precisam de autenticação!
 
 🤝 Contribuição
