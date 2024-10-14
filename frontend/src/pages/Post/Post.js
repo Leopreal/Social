@@ -9,6 +9,7 @@ import PostItem from "../../components/PostItem";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import { useResetComponentMessage } from "../../hooks/useResetComponentMessage";
 
 // redux
 import { getPost, like } from "../../slices/PostSlice";
@@ -18,6 +19,8 @@ const Post = () => {
   const { id } = useParams();
 
   const dispatch = useDispatch();
+
+  const resetMessage = useResetComponentMessage(dispatch);
 
   const { user } = useSelector((state) => state.auth);
   const { post, loading, error, message } = useSelector((state) => state.post);
@@ -33,6 +36,8 @@ const Post = () => {
   // like e comentario
   const handleLike = () => {
     dispatch(like(post._id));
+
+    resetMessage();
   };
 
   if (loading) {
@@ -43,6 +48,10 @@ const Post = () => {
     <div id="post">
       <PostItem post={post} />
       <LikeContainer post={post} user={user} handleLike={handleLike} />
+      <div className="message-container">
+        {error && <Message msg={error} type={"error"} />}
+        {message && <Message msg={message} type={"success"} />}
+      </div>
     </div>
   );
 };
