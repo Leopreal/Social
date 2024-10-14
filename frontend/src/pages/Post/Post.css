@@ -1,4 +1,4 @@
-.message-container {
+/* .message-container {
     margin: 1em 0;
   }
   
@@ -15,4 +15,85 @@
   .author {
     display: flex;
     font-weight: bold;
+  } */
+
+  #post {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
   }
+  
+  .message-container {
+    margin: 1em 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .comments {
+    width: 100%;
+  }
+  
+  .comments h3 {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 1.5em;
+  }
+  
+  .comments form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2em;
+  }
+  
+  .comments form input[type="text"] {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px;
+    margin-bottom: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+  
+  .comments form input[type="submit"] {
+    padding: 10px 20px;
+    border: 1px solid #363636;
+    background-color: #fff;
+    color: #363636;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .comments form input[type="submit"]:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .comment {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px;
+    margin: 10px auto;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .author {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+  
+  .comments p {
+    color: #555;
+    word-wrap: break-word;
+  }
+  
+  .comments p:hover {
+    text-decoration: underline;
+  }
+  
+  

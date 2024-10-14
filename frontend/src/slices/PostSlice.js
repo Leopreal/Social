@@ -107,6 +107,26 @@ export const like = createAsyncThunk("post/like", async (id, thunkAPI) => {
   return data;
 });
 
+// comentarios
+
+export const comment = createAsyncThunk(
+  "post/comment",
+  async (commentData, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await PostService.comment(
+      { comment: commentData.comment },
+      commentData.id,
+      token
+    );
+
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
+  }
+);
+
 export const postSlice = createSlice({
   name: "post",
   initialState,
@@ -202,29 +222,40 @@ export const postSlice = createSlice({
         state.error = null;
         const { postId, userId } = action.payload;
 
-
         if (state.post._id === postId) {
           if (!state.post.likes.includes(userId)) {
-            state.post.likes.push(userId); 
+            state.post.likes.push(userId);
           } else {
-            state.post.likes = state.post.likes.filter((id) => id !== userId); 
+            state.post.likes = state.post.likes.filter((id) => id !== userId);
           }
         }
         const postIndex = state.posts.findIndex((post) => post._id === postId);
 
         if (postIndex !== -1) {
-        
           if (!state.posts[postIndex].likes.includes(userId)) {
-            state.posts[postIndex].likes.push(userId); 
+            state.posts[postIndex].likes.push(userId);
           } else {
             state.posts[postIndex].likes = state.posts[postIndex].likes.filter(
               (id) => id !== userId
-            ); 
+            );
           }
         }
         state.message = action.payload.message;
       })
       .addCase(like.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(comment.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sucess = true;
+        state.error = null;
+
+        state.post.comments.push(action.payload.comment);
+
+        state.message = action.payload.message;
+      })
+      .addCase(comment.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
