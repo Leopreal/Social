@@ -123,6 +123,21 @@ const getPosts = async (token) => {
   }
 };
 
+// buscando post
+const searchPost = async (query, token) => {
+  const config = requestConfig("GET", null, token);
+
+  try {
+    const res = await fetch(api + "/posts/search?q=" + query, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const PostService = {
   publishPost,
   getUserPost,
@@ -132,6 +147,7 @@ const PostService = {
   like,
   comment,
   getPosts,
+  searchPost,
 };
 
 export default PostService;

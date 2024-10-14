@@ -138,6 +138,18 @@ export const getPosts = createAsyncThunk(
   }
 );
 
+// procurando post
+
+export const searchPost = createAsyncThunk(
+  "post/search",
+  async (query, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await PostService.searchPost(query, token);
+
+    return data;
+  }
+);
+
 export const postSlice = createSlice({
   name: "post",
   initialState,
@@ -275,6 +287,16 @@ export const postSlice = createSlice({
         state.error = false;
       })
       .addCase(getPosts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sucess = true;
+        state.error = null;
+        state.posts = action.payload;
+      })
+      .addCase(searchPost.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(searchPost.fulfilled, (state, action) => {
         state.loading = false;
         state.sucess = true;
         state.error = null;
