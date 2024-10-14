@@ -107,6 +107,22 @@ const comment = async (data, id, token) => {
   }
 };
 
+// pegando todas os post
+
+const getPosts = async (token) => {
+  const config = requestConfig("GET", null, token);
+
+  try {
+    const res = fetch(api + "/posts", config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const PostService = {
   publishPost,
   getUserPost,
@@ -115,6 +131,7 @@ const PostService = {
   getPost,
   like,
   comment,
+  getPosts,
 };
 
 export default PostService;
